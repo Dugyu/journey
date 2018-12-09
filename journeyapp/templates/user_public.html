@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{user.username}}
+{% endblock %}
+
+{% block forumtag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+{% block content %}
+<div id="content-fluid" class="container p-3">
+    <div class="row mt-2 mb-2">
+        <div class="mt-2 mb-3 col-sm-3">
+            <img class="rounded-circle" width="200" height="200" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="User Avatar">
+        </div>
+        <div class="mt-2 mb-3 col-sm-9 text-sm-left">            
+            <div class="mt-2 mb-2">
+                <h4 class="display-4"><b>{{user.username}}</b></h4>
+            </div>
+            <div class="mt-4">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    {{user.email}}
+                </p>
+            </div>
+        </div>
+        </div>
+        <hr/>
+    {% for post in posts.items %}
+        <div class="row">
+            <div class="col-sm-2 align-self-start">
+            </div>
+            <div class="col-sm-10">
+                <div class="text-sm-left">
+                    <a class="report-text-link" href="{{url_for('user_public',username=user.username)}}">{{ user.username }}</a>
+                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    <h5><a class="report-text-link" href="{{url_for('report', report_id = post.id)}}">{{post.title}}</a></h5>
+                </div>
+                <p class="text-sm-left">{{ post.content }}</p>
+            </div>
+        </div>
+        <hr/>
+    {% endfor %}  
+    {% for page in posts.iter_pages(left_edge=1,right_edge=1,left_current=1,right_current=2) %}
+        {% if page %}
+            {% if posts.page == page %}
+                <a class="btn btn-dark btn-sm" href="{{url_for('user_public', username=user.username)}}">{{page}}</a>
+            {% else %}
+                <a class="btn btn-outline-dark btn-sm" href="{{url_for('forum', page=page)}}">{{page}}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}  
+</div>
+{% endblock %}

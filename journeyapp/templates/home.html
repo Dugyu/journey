@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block hometag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+{% block content %}
+<div id="content-fluid" class="container p-3">
+    <div class="row">
+    <div class="col-sm-4">
+        {% for i in range(1,5) %}
+        <div class="row mt-5 mb-5">
+        <img class="rounded-circle mx-auto journey-poster" width="256" height="256" src="../static/home_pics/JourneyUrbanCafe0{{i}}.png" alt="Journey Urban Cafe Poster">
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-sm-8 text-sm-left">
+        <div class="row mt-2 mb-5">
+            <h1 class="display-2"><b>Journey × Lexicons</b></h1>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="mt-2 mb-2">
+            <h1 class="display-4">Findability + Discoverability</h1>
+            </div>
+            <div class="mt-2 mb-2">
+            <p>
+                    Findability and Discoverability are originally terms coined by Heater Lutze but popularized by Peter Morville to explain about the Web and internet (In 2005 he defined it as: “the ability of users to identify an appropriate Website and navigate the pages of the site to discover and retrieve relevant information resources”). However, the terms are closely related and essential for spaces of solidarity to create  a solidarity network in a complex society. Findability is a term for the ease with which spaces of solidarity can be found. It means that people can easily find the spaces of solidarity that they assume is present in the world. However, good management of solidarity network also promotes Discoverability, which means that people have great chances to encounter the spaces they don’t know that exist.  
+            </p>
+            </div>
+        </div> 
+        <div class="row mt-2 mb-2">
+            <div class="mt-2 mb-2">
+                <h1 class="display-4">Empowerment Portal</h1>
+            </div>
+            <div class="mt-2 mb-2">
+                <p>
+                        An empowerment portal is a tool/a medium that helps you find, discover, and allows you to express yourself. A portal links/expose individual voice to the society (singularities to the multiplicities). Through a portal, individuals have ways to contribute to the things they believe in. No matter whether a Portal is digital or physical (e.g. apps, third spaces),  it should have a certain extent of legitimacy in creating a social network where one feels comfortable and empowered to express themselves. 
+                </p>
+            </div>
+        </div> 
+        <div class="row mt-2 mb-2">
+            <div class="mt-2 mb-2">
+                <h1 class="display-4">Urban Family v. Urban Strangers</h1>
+            </div>
+            <div class="mt-2 mb-2">
+                <p>
+                        Urban Family is a term for a group of people who are not a real family, but treat each other as core members of social interaction and relationship. Social psychologists Jong-Gierveld and Van Tilburg believe that the absence of cohesive bonds in one mediating structure (family) can be compensated by the involvement in an alternative mediating structure (social partner). Indeed, when traditional “core families” decrease and mutable living arrangements(cohabitation, single-household, living apart together) increase, people have to rely more on social groups/partners rather than direct family members (Snell, K.D.M., 2017, The Rise of Living Alone and Loneliness in History). But the question is, how do people form such social groups in the contemporary world? How world at large shapes local habits of encounters?
+                </p>
+                <p>
+                        This term is strongly related to Ash Amin’s concept of  “Urban Strangers” ( Land of Strangers, 2012).  In sprawling metropolis and plural society, people are more and more managed by plan, order and discipline, e.g. work, school, institutions and neighborhood. There are no surprises in daily associations, no breathable public spaces,  thus strangers have no inclination to know each other, being locked into their existing networks of intimacy and belonging.  To achieve “belonging” (solidarity, common life, shared concern and togetherness are all its metaphors), the most important thing to do is to strengthen our relations with each other through daily encounters, so that everyday urban experience really adds to our personal life. The means could be networks of decent social infrastructures which is constituted of physical spaces, public services and the public sphere.  Today there are still too many obstacles for people to shape urban life and benefit from it. 
+                </p>
+                <p>
+                        A common ground for being familiar with strangers, forge associations and relationships will not only lead to the formation of Urban Families, but also diminish public interest in difference, thus build the project of Multiplicity.                         
+                </p>
+            </div>
+        </div> 
+        <div class="row mt-2 mb-2">
+            <div class="row mt-2 mb-5">
+                <h1 class="display-2"><b>Journey × Objective</b></h1>
+            </div>
+            <div class="mt-2 mb-2">
+                <p>
+                        Our contemporary world, with its dynamism and plurality, is a battleground. While the progress toward a globalized world is nevertheless good, sacrifices are inevitable because one’s consumption is always at the expense of someone else’s. Our world is governed through bureaucratic hierarchy that makes one’s personal voice become submerged over the “importance” of many, or the “important”. Moreover, even though we have enjoyed much sovereignty in a digital society, the advancement of technology pushes this phenomenon more, leaving one to feel even lonelier--no longer submerged but lost in the sea of “connections”. 
+                </p>
+                <p>
+                        When one lives in metropolitan cities like Jakarta and Beijing, one could not help but feel helpless to make any changes as one witness their spatial rights are taken away before their eyes. These cities are more designed for cars and commercial districts than its inhabitants. In South Jakarta, for example, Jakartan’s basic right to walk is taken away as sidewalks are used as parking lots and a site for commerce, forcing people to ride their cars to go from one place to another that are within 5 minute walking distant just because there is simply no where to walk. In Wudaokou, Beijing, local cafes and bookstores are being replaced by expensive restaurants. In the city, there is no free space as they are all tainted by unwelcoming and exclusive environment, which means the people losing their community. One’s right to public space is a vital part of creating social infrastructure. While it is often underlooked, social infrastructure is has been proven to be crucial in improving civic life (Klinenberg)  With every city competing to become metropolis, this problem needs to be addressed more than ever.  
+                </p>
+                <p>
+                    While the digital social platforms constantly disconnects people from the physical world, one could not deny that the everyday apps, such as Google Maps and Yelp, make one’s real life easier. Thus the progress and the turn to the digital world is inevitable, however can be geared to a solution to the frailing of social infrastructure. The problem with such apps is that they show boundless reality with no hierarchy, designed for the sake of efficiency rather than quality. It also create a virtual world which drives people further from the desire to maintain a physical social infrastructure. Therefore, as people get connected in the virtual world, they are disconnected from the physical world. How can digital social platform be used to connect people to build social infrastructure and rebuild the city? 
+                </p>
+                <p>
+                    Our goal is to study how media can enhance solidarity by creating effective networks in reality. Journey is an application that enables people to express their opinions on urban environments and find the places to meet other people with similar motivations. Our project was inspired from bottom-up urban movements, such as LA Urban Rangers (www.laurbanrangers.org) and Death Café (www.deathcafe.com).  The former group develop guided tours and interpretive tools to spark creative explorations of our everyday habitat. The latter group host small events in local cafes all over the world to discuss death and live a better life. We also look into Ingress, the AR game developed by Niantic, for the idea of location-based augmented reality. In this project, we are specifically analyzing two areas of metropolitan city: South Jakarta and Wudaokou in Beijing. Both areas are highly pack commercial districts where spatial rights are always contested. We are speculating that our implementations would help rebuild the social and physical infrastructure of these two areas, which would definitely could be developed and implemented in other areas and cities in the future.
+                </p>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

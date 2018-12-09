@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block logintag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+{% block content %}
+<div id="content-fluid" class="container p-3">
+
+    <form action="/login" method="post">
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            &nbsp
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            &nbsp
+            <input class="form-control" name="password" placeholder="Password" type="password">
+        </div>
+        <button class="btn btn-dark" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Log In
+        </button>
+    </form>
+<P>
+    <div id="infodiv">
+        <br>
+    </div>
+</P>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    let form = document.querySelector('form');
+    let username = document.querySelector('input[name="username"]');
+    let password = document.querySelector('input[name="password"]');
+
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        $.get('/checklogin', {username:username.value, password:password.value}, function(data) {
+            if (data == false){
+                document.querySelector('#infodiv').innerHTML = "Invalid username/password!";
+                return;
+            }
+            else{
+                form.submit();
+            }
+        });
+    };
+</script>
+
+</div>
+{% endblock %}

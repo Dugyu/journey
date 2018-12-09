@@ -1,0 +1,548 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Map
+{% endblock %}
+
+{% block map %}
+    active
+{% endblock %}
+
+{% block maptag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+
+{% block mapcontent %}
+<!-- Calendar -->
+<div class="calendar" id=calendar-container>
+  <div id=calendar-header>
+      <div id="calendar-button-prev" onclick="prev()">&#10094;</div>
+      <div id="calendar-button-next" onclick="next()">&#10095;</div>
+      <div id="calendar-month-year" data-month="" data-year=""></div>
+  </div>
+  <div id="calendar-days"></div>
+</div>
+<div id="map"></div>
+
+<!--Station Info Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="infoModalLabel">Station Info</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+      <div class="modal-body">
+        Station Abstract
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+          <a class='btn btn-sm btn-dark'  id='infoModalLink' href='' role='button'>See Journals</a>          
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Station Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel">Delete Station</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+      <div class="modal-body">
+        Are you sure you want to delete this station?
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+          <form id='deleteModalForm' action="" method="post">
+              <button id='modalDeleteButton' class="btn btn-dark btn-sm" type="submit">
+                  Delete
+              </button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--This get script from sub city templates -->
+{% block city %} {% endblock %}
+
+<script>
+    //----------------------------Global Function---------------------//
+    //--------------Initialize and Update Calendar on Map-------//
+  function prev(){
+    var date = new Date()
+    var month_no = date.getMonth()
+    var year = date.getFullYear() 
+    var today = date.getDate()
+    var monthYear = document.getElementById("calendar-month-year")
+    var month = parseInt(monthYear.dataset.month)
+    if (month > 0){
+      monthYear.dataset.month = month - 1
+    }
+    else{
+      monthYear.dataset.month = 11
+      monthYear.dataset.year =  parseInt(monthYear.dataset.year) - 1
+    }
+    calendar(today, month_no, year)
+    eventsClick()
+  }
+
+  function next(){
+    var date = new Date()
+    var month_no = date.getMonth()
+    var year = date.getFullYear() 
+    var today = date.getDate()
+    var monthYear = document.getElementById("calendar-month-year")
+    var month = parseInt(monthYear.dataset.month)
+    if (month <11){
+      monthYear.dataset.month = month + 1
+    }
+    else{
+      monthYear.dataset.month = 0
+      monthYear.dataset.year =  parseInt(monthYear.dataset.year) + 1
+    }
+    calendar(today, month_no, year)
+    eventsClick()
+
+  }
+  
+  //---Use jQuery instead of window.onload so it can wait until data is passed from
+  //Flask templates---------------------------------------//
+  $(document).ready( function initial_calendar(){
+    getEventsDays(events)
+    var date = new Date()
+    var month_no = date.getMonth()
+    var year = date.getFullYear() 
+    var today = date.getDate()
+    var monthYear = document.getElementById("calendar-month-year")
+    monthYear.dataset.month = month_no
+    monthYear.dataset.year = year
+    calendar(today, month_no, year)
+    eventsClick()
+  })
+    
+  function calendar(today, current_month, current_year){
+    //cleanup the days
+    document.getElementById("calendar-days").innerHTML = ''
+    // update calendar
+    var month_name = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]
+    var monthYear = document.getElementById("calendar-month-year")
+    var month_no = parseInt(monthYear.dataset.month)
+    var year = monthYear.dataset.year
+    var date_start = month_name[month_no] + " " + 1 + " " + year
+    var weekday_start = new Date(date_start).toDateString().substring(0,3)
+    var weekday_name = ["Sun", "Mon", "Tue", "Wed","Thu", "Fri", "Sat"]
+    var weekday_no = weekday_name.indexOf(weekday_start)
+    var days = new Date(parseInt(year), month_no + 1, 0).getDate()
+
+    monthYear.innerHTML = month_name[month_no] + " " + year
+    var calendar = create_calendar(weekday_no, days)
+    document.getElementById("calendar-days").appendChild(calendar)
+
+    
+    function create_calendar(weekday_no, days){
+      var weekday_name = ["Sun", "Mon", "Tue", "Wed","Thu", "Fri", "Sat"]
+      var calendar_table = document.createElement('table')
+      calendar_table.setAttribute("id", 'calendar-table')
+      var weekday_tr = document.createElement('tr')
+
+      // Row for Weeknames "Mon Tue Wed Thu Fri Sat Sun"
+      for(let i=0; i<7; i++){
+        var weekday_td = document.createElement('td')
+        weekday_td.innerHTML = weekday_name[i]
+        weekday_td.setAttribute("class","calendar-weekdayName")
+        weekday_tr.appendChild(weekday_td)
+      }
+      calendar_table.appendChild(weekday_tr);
+      
+      function isEventDay(day,month,year){
+        var datestring = String(year)+ '-'+ ('0' + month).slice(-2) + '-' + ('0'+ day).slice(-2)
+          return eventDays.has(datestring)
+      }
+     
+      function isToday(day, month_no, year){
+        return (day == today && month_no == current_month && year == current_year)
+      }
+
+      // Rows for Weekdays
+      // First Row
+      var days_tr = document.createElement('tr');
+        // First Row - Blank Space
+      for(let i = 0; i < weekday_no; i++){
+          var days_td = document.createElement('td');
+          days_td.innerHTML = "";
+          days_td.setAttribute("class", "calendar-blank")
+          days_tr.appendChild(days_td);
+      }
+        // First Row - Remaining Days
+      var day = 1;
+      for(let i = weekday_no; i < 7; i++){
+          var days_td = document.createElement('td');
+          if (isToday(day,month_no,year)){
+            if (isEventDay(day, month_no+1,year)){
+              days_td.setAttribute('class',"calendar-today calendar-eventday calendar-otherday")
+            }
+            else{
+              days_td.setAttribute('class',"calendar-today calendar-otherday")
+            }
+          }
+          else{
+            if (isEventDay(day, month_no+1,year)){
+              days_td.setAttribute("class", "calendar-eventday calendar-otherday")
+            }
+            else{
+              days_td.setAttribute("class", "calendar-otherday")
+            }
+          }
+          days_td.innerHTML = day;
+          days_tr.appendChild(days_td);
+          day++;
+      }
+      calendar_table.appendChild(days_tr);
+      // Main Rows
+      // One Month has Maximum 6 rows, 0 is already added, so start from 1
+      for(let j = 1; j < 6; j++){
+          days_tr = document.createElement('tr');
+          for(let i = 0; i < 7; i++){
+            var days_td = document.createElement('td');
+            // This Month has not end
+            if(day <= days){
+              days_td.innerHTML = day;
+              if (isToday(day,month_no,year)){
+                if (isEventDay(day,month_no + 1, year)){
+                  days_td.setAttribute("class", "calendar-otherday calendar-eventday calendar-today")
+                }
+                else{
+                  days_td.setAttribute("class", "calendar-otherday calendar-today")
+                }
+              }
+              else{
+                if (isEventDay(day,month_no + 1, year)){
+                  days_td.setAttribute("class", "calendar-eventday calendar-otherday")
+                }
+                else{
+                  days_td.setAttribute("class", "calendar-otherday")
+                } 
+              }
+            }
+            // This Month is ended
+            else{
+              days_td.innerHTML =' '
+              days_td.setAttribute("class", "calendar-blank")
+            }
+            day++;
+            days_tr.appendChild(days_td);
+            }
+          calendar_table.appendChild(days_tr);
+          }
+        return calendar_table;
+        }
+      }
+</script>
+
+<script>
+//----------------------------Global Function---------------------//
+//-----------------------Initialize Google Map-------------------//
+  var map;
+  var eventMarkers = [];
+  var eventSelectedDay = false;
+  var eventDays = new Set();
+
+  function initMap() {
+    // Create a new StyledMapType object, passing it an array of styles, and the name to be displayed on the map type control.
+    // Create a map object, and include the MapTypeId to add to the map type control.
+    map = new google.maps.Map(document.getElementById('map'), {
+      //center: {lat: 39.9931568, lng:  116.3375482},
+      center: myCity,
+      zoom: myCityZoom,
+      mapTypeControlOptions: {
+        mapTypeIds: ['roadmap', 'styled_map']
+        //mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+        //'styled_map']
+      }
+    });
+    google.maps.InfoWindow.prototype.opened = false;
+
+    // Customize Map Style
+    var styledMapType = new google.maps.StyledMapType(
+      [
+        {elementType: 'geometry', stylers: [{color: '#6A93A6'}]},
+        {elementType: 'labels.text.fill', stylers: [{visibility: 'off'}]},
+        {elementType: 'labels.text.stroke',stylers: [{visibility: 'off'}]},
+        {featureType: 'administrative', elementType: 'geometry.stroke',stylers: [{color: '#c9b2a6'}]}, 
+        {featureType: 'administrative.land_parcel',elementType: 'geometry.stroke',stylers: [{color: '#A5DEE4'}]},
+        {featureType: 'administrative.land_parcel',elementType: 'labels.text.fill',stylers: [{color: '#566C73'}]},
+        {featureType: 'landscape.natural',elementType: 'geometry',stylers: [{color: '#5A7E8D'}]},
+        {featureType: 'poi',elementType: 'geometry',stylers: [{color: '#779CAA'}]},
+        {featureType: 'poi',elementType: 'labels',stylers: [{visibility: 'off'}]},
+        {featureType: 'poi.park',elementType: 'geometry.fill', stylers: [{color: '#4F7885'}]},
+        {featureType: 'poi.park',elementType: 'labels.text.fill',stylers: [{visibility: 'off'}]},
+        {featureType: 'road',elementType: 'geometry', stylers: [{color: '#57727C'}]},
+        {featureType: 'road.arterial',elementType: 'geometry',stylers: [{color: '#566C73'}]},
+        {featureType: 'road.highway',elementType: 'geometry',stylers: [{color: '#566C73'}]},
+        {featureType: 'road.highway',elementType: 'geometry.stroke',stylers: [{color: '#566C73'}]},
+        {featureType: 'road.highway.controlled_access',elementType: 'geometry',stylers: [{color: '#e98d58'}]},
+        {featureType: 'road.highway.controlled_access',elementType: 'geometry.stroke',stylers: [{color: '#db8555'}]},
+        {featureType: 'road.local',elementType: 'labels.text.fill',stylers: [{color: '#566C73'}]},
+        {featureType: 'transit.line',elementType: 'geometry',stylers: [{color: '#dfd2ae'}]},
+        {featureType: 'transit.line',elementType: 'labels.text.fill',stylers: [{color: '#8f7d77'}]},  
+        {featureType: 'transit.line',elementType: 'labels.text.stroke',stylers: [{color: '#A5DEE4'}]},
+        {featureType: 'transit.station',elementType: 'geometry',stylers: [{color: '#dfd2ae'}]},
+        {featureType: 'transit.station',elementType: 'labels.icon',
+           "stylers":
+           [{ "saturation": -100,
+              "gamma": 1.0
+            }]},
+        {featureType: 'water',elementType: 'geometry.fill', stylers: [{color: '#566C73'}]},
+        {featureType: 'water', elementType: 'labels.text.fill', stylers: [{color: '#566C73'}]} 
+      ],{name: 'Journey Map'});
+  
+    //Associate the styled map with the MapTypeId and set it to display.
+    map.mapTypes.set('styled_map', styledMapType);
+    map.setMapTypeId('styled_map');
+    
+    // Marker Icons
+    var icon = {
+      path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+      fillColor:'#F17C67',
+      fillOpacity: 1,
+      anchor: new google.maps.Point(11,22),
+      strokeWeight:2,
+      //strokeColor: '#dfd2ae',
+      strokeColor: '#AAD3E6', 
+      scale:2,
+    }
+
+    var post_icon = {
+      path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+      fillColor:'#F17C67',
+      fillOpacity: 0.1,
+      anchor: new google.maps.Point(11,22),
+      strokeWeight:2,
+      //strokeColor: '#dfd2ae',
+      strokeColor: '#AAD3E6', 
+      scale: 1,
+    }
+
+    var event_icon = {
+      path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+      fillColor:'#F17C67',
+      fillOpacity: 0,
+      anchor: new google.maps.Point(11,22),
+      strokeWeight:0,
+      //strokeColor: '#dfd2ae',
+      strokeColor: '#AAD3E6', 
+      scale: 0.1,
+    }
+
+
+    // Add Stations Markers to Map
+    for (var i = 0; i < stations.length; i++) {  
+      latitude = parseFloat(stations[i].lat)
+      longtitude = parseFloat(stations[i].lng)
+      var latLng = new google.maps.LatLng(latitude,longtitude);
+      var marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        map:map,
+        title:stations[i].name,
+        icon:icon,
+        id: String(stations[i].id),
+        timeinfo: stations[i].timeinfo,
+        feature: stations[i].feature
+      });
+      
+      // Delete & Update & More Info Buttons
+      var delete_button = "<button type='button' class='btn btn-danger btn-sm m-1' data-station="+ i + "  data-toggle='modal' data-target='#deleteModal'>Delete</button>" 
+      var update_button = "<a class='btn btn-sm btn-dark m-1' href='/anchor/"+ marker.id +"/update' role='button'>Update</a>"            
+      var moreinfo_button = "<button type='button' class='btn btn-light btn-sm m-1' data-station=" + i + " data-toggle='modal' data-target='#infoModal'>More</button>" 
+      var station_title = "<h5>" + marker.title + "</h5>"
+      var station_avatar = "<img class='rounded-circle legend-pic' width=120 height=120 src=" + '../static/station_pics/'+  stations[i].image + ">"
+      
+      // Main Content on the Legend
+      if (userinfo.isLoggedIn == true && (userinfo.session == stations[i].seer || parseInt(userinfo.session) <= 3)){
+        var content_string= "<div class='row'>" +
+            "<div class='col-sm-5 mt-2 mb-2 vertical'>"+
+              station_avatar + 
+            "</div>" + 
+            "<div class='col-sm-7 mt-2 mb-2'>" + 
+            station_title +
+            '<p>'+"<small class='text-muted'>"+ stations[i].timeinfo + '</small>'+ '<br>'
+            + stations[i].feature + '</p>'+ 
+            delete_button + update_button + moreinfo_button +
+            '</div>'+
+            '</div>';
+      }
+      else{
+        var content_string= "<div class='row'>" +
+            "<div class='col-sm-5 mt-2 mb-2 vertical'>"+
+              station_avatar + 
+            "</div>" + 
+            "<div class='col-sm-7 mt-2 mb-2'>" + 
+            station_title +
+            '<p>'+"<small class='text-muted'>"+ stations[i].timeinfo + '</small>'+ '<br>'
+            + stations[i].feature + '</p>'
+            + moreinfo_button +'</div>'+
+            '</div>';
+      }
+      addBehaviour_station(marker, content_string)
+    }
+
+    // Add Comments Markers
+    for (var i = 0; i < posts.length; i++) {  
+      latitude = parseFloat(posts[i].lat)
+      longtitude = parseFloat(posts[i].lng)
+      var latLng = new google.maps.LatLng(latitude,longtitude);
+      var marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        map:map,
+        title:posts[i].title,
+        icon:post_icon
+      });
+      // Popup window content
+      var contentstring= "<div><h5>"
+        + marker.title + "</h5>" + '<br>'+
+         '<p>'+ posts[i].content +  '</p>'+
+         '</div>';
+       addBehaviour(marker, contentstring)
+     }
+
+
+    // Add Events Markers
+    for (var i = 0; i < events.length; i++) {  
+      latitude = parseFloat(events[i].lat)
+      longtitude = parseFloat(events[i].lng)
+      var latLng = new google.maps.LatLng(latitude,longtitude);
+      var marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        map:map,
+        title:events[i].name,
+        date:events[i].date,
+        icon:event_icon,
+      });
+      // Popup window content
+      var moreinfo_button = "<a class='btn btn-sm btn-light m-1' href='/journal/"+ events[i].journal_id +"' role='button'>More Info</a>"            
+
+      var contentstring= "<div class='row'><div class='col-sm-5 mt-1 mb-1'><img class='rounded-circle' width=70 height=70 src=" + '../static/event_pics/'+  events[i].image
+        + "></div><div class='col-sm-7 mt-1'><h6>"
+        + marker.title + "</h6>" +
+          '<p>'+ events[i].date +  '</p>'+
+          moreinfo_button+
+          '</div></div>';
+        addBehaviour_event(marker, contentstring)
+        eventMarkers.push(marker)
+    }
+    
+   
+  }
+//----------------------------Initial Map Function Ends--------------------//
+
+
+// ----------------------------Global Function----------------------------//
+  // Read Data from Flask
+  var stations = {{ stations | tojson | safe }};
+  var posts = {{ posts | tojson | safe }};
+  var events = {{ events | tojson | safe }}
+  var userinfo = {{ userinfo | tojson | safe }}
+
+  // For Events
+  function addBehaviour_event(marker, info){
+    var infowindow = new google.maps.InfoWindow({
+      content: info,
+      maxWidth: 300,
+      pixelOffset: new google.maps.Size(0, -38)
+    });
+    marker.addListener('click', function() {
+      infowindow.open(marker.get('map'), marker);
+    });
+    marker.addListener('rightclick', function(){
+      infowindow.close();
+    });
+  }
+
+  // For Comments 
+  function addBehaviour(marker, info){
+    var infowindow = new google.maps.InfoWindow({
+      content: info,
+      maxWidth: 300
+    });
+    marker.addListener('click', function() {
+      infowindow.open(marker.get('map'), marker);
+    });
+  }
+
+  // For Station Markers
+  function addBehaviour_station(marker, info){
+    var infowindow = new google.maps.InfoWindow({
+      content: info,
+      maxWidth: 400
+    });
+    marker.addListener('click', function() {
+      infowindow.open(marker.get('map'), marker);
+    });
+  }
+
+  $('#infoModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
+    var station = stations[button.data('station')] 
+    var modal = $(this)
+    modal.find('.modal-title').text(station.name)
+    modal.find('.modal-body').text(station.abstract)
+    modal.find('#infoModalLink').attr("href", "/station/" + String(station.name))
+  })
+
+  $('#deleteModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
+    var station = stations[button.data('station')] 
+    var modal = $(this)
+    modal.find('#deleteModalForm').attr("action", "/anchor/" + String(station.id) +"/delete")
+  })
+
+  function eventsClick(){
+    $('#calendar-days td.calendar-otherday').on('click', function(event){
+      clearSelectedDayEvents(events)
+      eventSelectedDay = $('#calendar-month-year').attr('data-year')+ '-'+ ('0' + (parseInt($('#calendar-month-year').attr('data-month')) + 1)).slice(-2) + '-'
+      + ('0'+ this.innerHTML).slice(-2)
+      getSelectedDayEvents(events)
+    })
+  }
+
+  function getSelectedDayEvents(events){
+    for(var i = 0; i < events.length; i++){
+      if(events[i].date === eventSelectedDay){
+        google.maps.event.trigger(eventMarkers[i],'click')
+      }
+    }
+  }
+
+  function clearSelectedDayEvents(events){
+    if (eventSelectedDay != false){
+      for(var i = 0; i < events.length; i++){
+        if(events[i].date === eventSelectedDay){
+          google.maps.event.trigger(eventMarkers[i],'rightclick')
+        }
+      }
+    }
+  }
+  
+  // To Be Used In Calendar, Highlight the dates that have events going on 
+  function getEventsDays(events){
+    for (var i = 0; i < events.length; i++){
+      eventDays.add(events[i].date)
+    }
+  }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNY2u9F8pqbuOnBBMZM2wuJVJYViVH_6w&callback=initMap&language=en-US"
+></script>
+{% endblock %}

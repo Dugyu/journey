@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    REGISTER
+{% endblock %}
+
+{% block logintag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+{% block content %}
+<div id="content-fluid" class="container p-3">
+
+    <form action="/register" method="post">
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            &nbsp
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+        </div>
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            &nbsp
+            <input autocomplete="off" class="form-control" name="email" placeholder="Email" type="email" required>
+        </div>
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            &nbsp
+            <input class="form-control" name="password" placeholder="Password" type="password" required >
+        </div>
+        <div class="form-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            &nbsp
+            <input class="form-control" name="confirmation" placeholder="Password (again)" type="password" required >
+        </div>
+        <button class="btn btn-dark" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Register
+        </button>
+    </form>
+    <P>
+        <div id="infodiv">
+            <br>
+        </div>
+    </P>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        let form = document.querySelector('form');
+        let username = document.querySelector('input[name="username"]');
+        let email = document.querySelector('input[name="email"');
+        let password = document.querySelector('input[name="password"]');
+        let confirmation = document.querySelector('input[name="confirmation"]');
+        
+        username.onkeyup= function(){
+            document.querySelector('#infodiv').innerHTML = '<br>';
+            console.log(username.value);
+            if (username.value == ''){
+                return;
+            }
+            $.get('/checkuser?username=' + username.value, function(data) {
+                if (data == false){
+                document.querySelector('#infodiv').innerHTML = "Username already exists!";
+                }
+            });
+        };
+
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            $.get('/checkuser?username=' + username.value, function(data) {
+                if (data == false){
+                    return;
+                }
+                $.get('/checkemail?email=' + email.value, function(data){
+                    if (data == false){
+                        document.querySelector('#infodiv').innerHTML = "Email already exists!";
+                        return;
+                    }
+                    //check password and confirmation
+                    else if ( password.value.localeCompare(confirmation.value) != 0) {
+                    document.querySelector('#infodiv').innerHTML = "Password and confirmation must be the same!";
+                    }
+                    else{
+                        form.submit();
+                    }
+                });
+            });
+        };
+    </script>
+</div>
+{% endblock %}

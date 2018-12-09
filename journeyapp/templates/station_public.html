@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{station.name}}
+{% endblock %}
+
+{% block forumtag %}
+    <span class="sr-only">(current)</span>    
+{% endblock %}
+
+{% block content %}
+<div id="content-fluid" class="container p-3">
+    <div class="row mt-2 mb-2">
+    <div class="mt-2 mb-3 col-sm-3">
+        <img class="rounded-circle" width="200" height="200" src="{{ url_for('static', filename='station_pics/' + station.image_file) }}" alt="Station Avatar">
+    </div>
+    <div class="mt-2 mb-3 col-sm-9 text-sm-left">
+        <small class="text-muted">Found By </small>
+        <a class="text-muted" href="{{url_for('user_public',username=station.seer.username)}}"><small><b>{{station.seer.username}}</b></small></a>
+        
+        <div class="mt-2 mb-2">
+            <h4 class="display-4"><b>{{station.name}}</b></h4>
+        </div>
+        <div class="mt-4">
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                {{station.timeinfo}}
+            <br>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+                {{station.feature}}
+            </p>
+            <p>
+                {{station.abstract}}
+            </p>
+        </div>
+    </div>
+    </div>
+    <hr/>
+    {% for journal in journals.items %}
+    <div class="row">
+        <div class="col-sm-2 align-self-start">
+        </div>
+            <div class="col-sm-10">
+                <div class="text-sm-left">
+                    <a class="report-text-link" href="{{url_for('station_public',station_name=journal.event.station.name)}}">
+                                {{ journal.station.name }}</a>
+                    <small class="text-muted">{{ journal.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    <h5><a class="report-text-link" href="{{url_for('single_journal', journal_id = journal.id)}}">{{journal.title}}</a></h5>
+                    <small class="text-muted">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                        {{ journal.event.name}}</small>
+                    <br>
+                    <small class="text-muted">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        {{ journal.event.date.strftime('%Y-%m-%d')}}</small>
+                </div>
+                {% if strlen(journal.content) > 80 %}
+                <p class="text-sm-left">{{ journal.content[0:80]}} ...</p>
+                {% else %}
+                    <p class="text-sm-left">{{ journal.content}}</p>
+                {% endif %}
+            </div>
+        </div>
+        <hr/>
+    {% endfor %}  
+    {% for page in journals.iter_pages(left_edge=1,right_edge=1,left_current=1,right_current=2) %}
+        {% if page %}
+            {% if journals.page == page %}
+                <a class="btn btn-sm btn-dark" href="{{url_for('journal', page=page)}}">{{page}}</a>
+            {% else %}
+                <a class="btn btn-outline-dark btn-sm" href="{{url_for('journal', page=page)}}">{{page}}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}  
+</div>
+{% endblock %}

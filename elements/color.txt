@@ -1,0 +1,23 @@
+Pink Orange
+#ff9287
+
+Light Yellow
+#dfd2ae
+
+Yellow
+#e98d58
+
+Orange
+#F17C67
+
+Light Blue
+#AAD3E6
+
+Middle Large Area Blue
+#6A93A6
+
+Poi Green Blue Slightly Light
+#779CAA
+
+Blue
+#4F7885
