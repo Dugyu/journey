@@ -20,9 +20,11 @@
                 <a class="report-text-link" href="{{url_for('user_public',username=post.author.username)}}">{{ post.author.username }}</a>
                 <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                 <h3>{{post.title}}</h3>
+                {% if session["user_id"] %}
                 {% if post.author.id == session["user_id"] or session["user_id"] <= 3 %}
                     <a class="btn btn-sm btn-dark" href="{{url_for('update_report', report_id=post.id)}}" role="button">Update</a>
                     <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                {% endif %}
                 {% endif %}
             </div>
             {% if strlen(post.content) > 300 %}
