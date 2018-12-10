@@ -542,7 +542,18 @@
     }
   }
 </script>
+<script>
+  var  MY_API_KEY= config.MY_API_KEY;
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&language=en-US"
-></script>
+  function loadScript() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=' +
+        MY_API_KEY +'&initMap&language=en-US'; 
+    document.body.appendChild(script);
+  }
+  window.onload = loadScript;
+</script>
+
+
 {% endblock %}
