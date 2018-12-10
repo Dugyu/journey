@@ -22,7 +22,7 @@ Session(app)
 
 # Configure database
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://strxotrpnncsmg:80a6ecbd2831b8437f3a026915b8f23c7a5f820be02c812a3726c7d66ff12398@ec2-54-227-249-201.compute-1.amazonaws.com:5432/d6ojd8vt630glk'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://omfgiyhxovsdia:85689f7ebbec3b5a3b901287465ae865c2aff766454a9ca9027e55323992d757@ec2-54-243-150-10.compute-1.amazonaws.com:5432/d91d5sfeo9tll2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
