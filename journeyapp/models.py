@@ -3,10 +3,10 @@ from datetime import datetime
 from datetime import date
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
+    username = db.Column(db.Text, unique=True, nullable=False)
+    email = db.Column(db.Text, unique=True, nullable=False)
     image_file = db.Column(db.String(70), nullable=False, default="default.jpg")
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(db.Text, nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     stations = db.relationship('Station', backref='seer', lazy=True)
     events = db.relationship('Event', backref='user', lazy=True)
@@ -16,7 +16,7 @@ class User(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     latitude = db.Column(db.Numeric(10,7), nullable=False, default=39.9931568)
@@ -27,7 +27,7 @@ class Post(db.Model):
 
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.Text, unique=True, nullable=False)
     latitude = db.Column(db.Numeric(10,7), nullable=False, default=39.9931568)
     longtitude = db.Column(db.Numeric(10,7), nullable=False, default=116.3375482)
     timeinfo = db.Column(db.Text, nullable=False)
@@ -42,7 +42,7 @@ class Station(db.Model):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.Text, nullable=False)
     image_file = db.Column(db.String(70), nullable=False, default="default.jpg")
     date = db.Column(db.Date, nullable=False, default=date.today())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -53,7 +53,7 @@ class Event(db.Model):
 
 class Journal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey("event.id"), nullable=False)
