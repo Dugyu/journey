@@ -6,7 +6,7 @@ class User(db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     image_file = db.Column(db.String(70), nullable=False, default="default.jpg")
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     stations = db.relationship('Station', backref='seer', lazy=True)
     events = db.relationship('Event', backref='user', lazy=True)
