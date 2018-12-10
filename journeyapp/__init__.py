@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
-from flask_migrate import Migrate
 
 from tempfile import mkdtemp
 
@@ -28,7 +27,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Database
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 def strlen(s):
     return len(s)
