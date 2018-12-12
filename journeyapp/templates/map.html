@@ -71,6 +71,57 @@
   </div>
 </div>
 
+<!-- Add Station Form Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addModalLabel">Add Station</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+          <form id="anchorNew" action="/anchor/new" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-textarea" name="title" id="title" placeholder="Station Name" type="text" required>
+            </div>
+            <div class="form-group">
+                <input autocomplete="off" class="form-textarea" name="latitude" id="latitude" placeholder="Latitude" type="number" step= 0.0000001 min=-90.0000000 max= 90.0000000 required>
+            </div>
+            <div class="form-group">
+                <input autocomplete="off" class="form-textarea" name="longtitude" id="longtitude" placeholder="Longtitude" type="number" step= 0.0000001 min=-180.0000000 max=180.0000000 required>
+            </div>
+            <div class="form-group">
+                <input autocomplete="off" class="form-textarea" name="timeinfo" id="timeinfo" placeholder="Time Information" type="text" default="Mon-Fri 8:00AM-10:00PM Sar-Sun: 8:00AM-12:00AM">
+            </div>
+            <div class="form-group">
+                <input autocomplete="off" class="form-textarea" name="feature" id="feature" placeholder="Key Feature" type="text" default="A home for urban dwellers">
+            </div>
+            <div class="form-group">
+                <textarea autocomplete="off" class="form-textarea" row="8" name="abstract" id="abstract" placeholder="Station Abstract" type="text" default="This is a Journey Station"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                <input type="file" class="custom-file-input" id="avatar customFile" name="avatar" accept="image/*">     
+                <label class="custom-file-label" for="customFile"></label>
+                </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+            <button id='modalAddButton' class="btn btn-dark btn-sm" type="button">
+                Add
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
 <!--This get script from sub city templates -->
 {% block city %} {% endblock %}
 
@@ -255,6 +306,8 @@
   var eventMarkers = [];
   var eventSelectedDay = false;
   var eventDays = new Set();
+  var stationLat;
+  var stationLng;
 
   function initMap() {
     // Create a new StyledMapType object, passing it an array of styles, and the name to be displayed on the map type control.
@@ -309,6 +362,11 @@
     map.mapTypes.set('styled_map', styledMapType);
     map.setMapTypeId('styled_map');
     
+    // Add Event Listener to RightClick        
+    map.addListener('click', function(e) {
+      callModalForm(e.latLng);
+    });
+
     // Marker Icons
     var icon = {
       path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
@@ -492,6 +550,23 @@
     });
   }
 
+
+  function callModalForm(latLng){
+    stationLat = parseFloat(latLng.lat()).toFixed(7)
+    stationLng = parseFloat(latLng.lng()).toFixed(7)
+    $('#addModal').modal('show')
+  }
+  $('#addModal').on('show.bs.modal', function(event){
+    var modal = $(this)
+
+    modal.find(".modal-body input[name='latitude']").val(stationLat)
+    modal.find(".modal-body input[name='longtitude']").val(stationLng)
+  });
+
+  $('#modalAddButton').on('click',function(){
+    $('#anchorNew').submit()
+  })
+  
   $('#infoModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) 
     var station = stations[button.data('station')] 
