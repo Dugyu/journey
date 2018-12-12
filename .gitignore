@@ -1,1 +1,6 @@
 /journeyapp/static/config.js
+/__pycache__/
+/.vs/
+/.vscode/
+/env/
+/journeyapp/__pycache__/
