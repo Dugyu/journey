@@ -40,13 +40,13 @@
     </P>
 </div>
 <script>
-
-
+    navigator.geolocation.getCurrentPosition(function () {}, function () {}, {});
     navigator.geolocation.getCurrentPosition(function(position) {
         document.querySelector('input[name="latitude"]').value = position.coords.latitude.toFixed(7);
         document.querySelector('input[name="longtitude"]').value = position.coords.longitude.toFixed(7);
-    });
-
+    },function (e) {
+        console.log("geolocating failed")
+    },  {enableHighAccuracy:true});
 
 </script>
 
