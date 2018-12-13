@@ -21,8 +21,8 @@ Session(app)
 
 
 # Configure database
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRE_DATABASE_URI']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRE_DATABASE_URI']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Database
