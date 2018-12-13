@@ -411,7 +411,7 @@ def new_journal():
             flash("Your journal has been created!", 'success')
             return redirect('/journal')
         
-        image_file = save_image(jourimages[0],256,'event_pics')
+        image_file = save_image(jourimages[0],512,'event_pics')
         event.image_file = image_file
         db.session.commit()
         journal = Journal.query.filter_by(event=event).first()
@@ -478,7 +478,7 @@ def new_anchor():
             flash("Station has been added to our map!", 'success')
             return redirect('/map/' + cityname)
         
-        image_file = save_image(avatar,256,'station_pics')
+        image_file = save_image(avatar,512,'station_pics')
         station.image_file = image_file
         db.session.commit()
 
@@ -564,7 +564,7 @@ def update_journal(journal_id):
             flash("Your journal has been updated!", 'success')
             return redirect('/journal')
         
-        image_file = save_image(jourimages[0],256,'event_pics')
+        image_file = save_image(jourimages[0],512,'event_pics')
         event.image_file = image_file
         db.session.commit()
 
