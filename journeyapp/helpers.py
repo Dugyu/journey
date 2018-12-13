@@ -39,13 +39,11 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-S3_KEY_ID = 'AKIAINZE3G23ETDDTV7A'
-S3_KEY_SECRET = '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'
 
 s3 = boto3.client(
    "s3",
-   aws_access_key_id=S3_KEY_ID,
-   aws_secret_access_key=S3_KEY_SECRET
+   aws_access_key_id=app.config["AWS_ACCESS_KEY_ID"],
+   aws_secret_access_key=app.config["AWS_SECRET_ACCESS_KEY"]
 )
 
 def upload_file_to_s3(file_object, image_path, image_ext, bucket_name, acl="public-read"):

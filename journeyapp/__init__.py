@@ -22,16 +22,16 @@ Session(app)
 
 # Configure database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://omfgiyhxovsdia:85689f7ebbec3b5a3b901287465ae865c2aff766454a9ca9027e55323992d757@ec2-54-243-150-10.compute-1.amazonaws.com:5432/d91d5sfeo9tll2'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Database
 db = SQLAlchemy(app)
 
 # S3 bucket
-app.config['FLASKS3_BUCKET_NAME'] =
-app.config['AWS_ACCESS_KEY_ID'] = 
-app.config['AWS_SECRET_ACCESS_KEY'] = 
+app.config['FLASKS3_BUCKET_NAME'] = os.environ['S3_BUCKET_NAME']
+app.config['AWS_ACCESS_KEY_ID'] = os.environ['AWS_ACCESS_KEY_ID']
+app.config['AWS_SECRET_ACCESS_KEY'] = os.environ['AWS_SECRET_ACCESS_KEY']
 app.config['FLASKS3_HEADERS'] =    {'Expires': 'Mon, 31 Dec 2018 20:00:00 GMT'}
 app.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(app.config['FLASKS3_BUCKET_NAME'])
 
