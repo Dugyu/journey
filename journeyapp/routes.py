@@ -101,7 +101,7 @@ def profile():
             flash("Your profile has been updated!", 'success')
             return redirect("/profile")
 
-        image_file = save_image(avatar,256,'profile_pics')
+        image_file = save_image(avatar,512,'profile_pics')
         user.image_file = image_file
         db.session.commit()
         
@@ -224,7 +224,7 @@ def update_anchor(anchor_id):
             flash("Station has been updated!", 'success')
             return redirect('/map/'+cityname)
 
-        image_file = save_image(avatar,256,'station_pics')
+        image_file = save_image(avatar,512,'station_pics')
         station.image_file = image_file
         db.session.commit()
         flash("Station has been updated!", 'success')
@@ -411,13 +411,13 @@ def new_journal():
             flash("Your journal has been created!", 'success')
             return redirect('/journal')
         
-        image_file = save_image(jourimages[0],512,'event_pics')
+        image_file = save_image(jourimages[0],1024,'event_pics')
         event.image_file = image_file
         db.session.commit()
         journal = Journal.query.filter_by(event=event).first()
 
         for jourimage in jourimages:
-            jourimage_file = save_image(jourimage,512,'journal_pics')
+            jourimage_file = save_image(jourimage,1024,'journal_pics')
             new_jourimage = Jourimage(filename=jourimage_file,journal=journal)
             db.session.add(new_jourimage)
             db.session.commit()
@@ -564,7 +564,7 @@ def update_journal(journal_id):
             flash("Your journal has been updated!", 'success')
             return redirect('/journal')
         
-        image_file = save_image(jourimages[0],512,'event_pics')
+        image_file = save_image(jourimages[0],1024,'event_pics')
         event.image_file = image_file
         db.session.commit()
 
@@ -573,7 +573,7 @@ def update_journal(journal_id):
             db.session.delete(oldimage)
             db.session.commit()
         for jourimage in jourimages:
-            jourimage_file = save_image(jourimage,512,'journal_pics')
+            jourimage_file = save_image(jourimage,1024,'journal_pics')
             new_jourimage = Jourimage(filename=jourimage_file,journal=journal)
             db.session.add(new_jourimage)
             db.session.commit()

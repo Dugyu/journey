@@ -77,10 +77,10 @@ def save_image(imagedata,maxpixel,address):
     img_height = image.size[1]
 
     if img_width > img_height:
-        img_width = round(img_width/img_height) * maxpixel
+        img_width = round(img_width/img_height * maxpixel)
         img_height = maxpixel
     else:
-        img_height = round(img_height/img_width) * maxpixel
+        img_height = round(img_height/img_width * maxpixel)
         img_width = maxpixel
 
     resized_image = image.resize((img_width,img_height))

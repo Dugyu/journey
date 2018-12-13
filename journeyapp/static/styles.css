@@ -128,10 +128,7 @@ div.vertical{
     flex-direction: column;
     justify-content: center;
 }
-.profile-image
-{
-    width: 50%;
-}
+
 main
 {
     /* scroll horizontally as needed */
