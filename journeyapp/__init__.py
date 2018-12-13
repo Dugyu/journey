@@ -22,7 +22,7 @@ Session(app)
 
 # Configure database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRE_DATABASE_URI']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Database
@@ -34,8 +34,6 @@ app.config['AWS_ACCESS_KEY_ID'] = os.environ['AWS_ACCESS_KEY_ID']
 app.config['AWS_SECRET_ACCESS_KEY'] = os.environ['AWS_SECRET_ACCESS_KEY']
 app.config['FLASKS3_HEADERS'] =    {'Expires': 'Mon, 31 Dec 2018 20:00:00 GMT'}
 app.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(app.config['FLASKS3_BUCKET_NAME'])
-
-print(os.getenv("S3_BUCKET_NAME"))
 
 s3 = FlaskS3(app)
 
