@@ -326,9 +326,9 @@ def user_public(username):
 @login_required
 def new_report():
     if request.method == "GET":
-        form = {"title": '', "content": ''} 
+        post = {"title": '', "content": ''} 
         return render_template("create_report.html", title="New Report",\
-         form_title='', form_content='', button_name="Create",url="new")
+         post=post, button_name="Create",url="new")
     else:
         # Ensure title was submitted
         if not request.form.get("title"):
@@ -591,7 +591,7 @@ def update_report(report_id):
             return apology("You do not have access!", 403)
         url = str(report_id)+"/update"
         return render_template("create_report.html", title="Update Report",\
-        form_title=post.title, form_content=post.content, button_name="Update", url=url)
+        post=post, button_name="Update", url=url)
     else:
         # Ensure title was submitted
         if not request.form.get("title"):
