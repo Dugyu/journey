@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_s3 import FlaskS3
 from tempfile import mkdtemp
-
+import os
 
 # App
 app = Flask(__name__)
@@ -31,10 +31,16 @@ db = SQLAlchemy(app)
 
 # S3 bucket
 app.config['FLASKS3_BUCKET_NAME'] = 'solidarityjourney'
+app.config['AWS_ACCESS_KEY_ID'] = 'AKIAITWHQV3IE6QA2Z4Q'
+app.config['AWS_SECRET_ACCESS_KEY'] = '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'
+app.config['FLASKS3_HEADERS'] =    {'Expires': 'Mon, 31 Dec 2018 20:00:00 GMT'}
+
 s3 = FlaskS3(app)
 
 def strlen(s):
     return len(s)
+def string(s):
+    return str(s)
 app.jinja_env.globals.update(strlen=strlen)
-
+app.jinja_env.globals.update(string=string)
 from journeyapp import routes

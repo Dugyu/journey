@@ -14,7 +14,7 @@
     <div class="col-sm-4">
         {% for i in range(1,5) %}
         <div class="row mt-5 mb-5">
-        <img class="rounded-circle mx-auto journey-poster" width="256" height="256" src="../static/home_pics/JourneyUrbanCafe0{{i}}.png" alt="Journey Urban Cafe Poster">
+        <img class="rounded-circle mx-auto journey-poster" width="256" height="256" src="{{url_for('static', filename='home_pics/JourneyUrbanCafe0' + string(i) +'.png')}}" alt="Journey Urban Cafe Poster">
         </div>
         {% endfor %}
     </div>

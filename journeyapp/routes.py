@@ -72,7 +72,7 @@ def profile():
         posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(per_page=4,page=page)
-        return render_template("profile.html", user=user, image_file=image_file, posts=posts)
+        return render_template("profile.html", user=user, posts=posts)
     else:
         user = User.query.filter_by(id=session["user_id"]).first()
         username = request.form.get("username")

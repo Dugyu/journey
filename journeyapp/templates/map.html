@@ -423,7 +423,7 @@
       var update_button = "<a class='btn btn-sm btn-dark m-1' href='/anchor/"+ marker.id +"/update' role='button'>Update</a>"            
       var moreinfo_button = "<button type='button' class='btn btn-light btn-sm m-1' data-station=" + i + " data-toggle='modal' data-target='#infoModal'>More</button>" 
       var station_title = "<h5>" + marker.title + "</h5>"
-      var station_avatar = "<img class='rounded-circle legend-pic' width=120 height=120 src=" + '../static/station_pics/'+  stations[i].image + ">"
+      var station_avatar = "<img class='rounded-circle legend-pic' width=120 height=120 src=" + 'http://solidarityjourney.s3.amazonaws.com/static/station_pics/'+  stations[i].image + ">"
       
       // Main Content on the Legend
       if (userinfo.isLoggedIn == true && (userinfo.session == stations[i].seer || parseInt(userinfo.session) <= 3)){
@@ -491,7 +491,7 @@
       // Popup window content
       var moreinfo_button = "<a class='btn btn-sm btn-light m-1' href='/journal/"+ events[i].journal_id +"' role='button'>More Info</a>"            
 
-      var contentstring= "<div class='row'><div class='col-sm-5 mt-1 mb-1'><img class='rounded-circle' width=70 height=70 src=" + '../static/event_pics/'+  events[i].image
+      var contentstring= "<div class='row'><div class='col-sm-5 mt-1 mb-1'><img class='rounded-circle' width=70 height=70 src=" + 'http://solidarityjourney.s3.amazonaws.com/static/event_pics/'+  events[i].image
         + "></div><div class='col-sm-7 mt-1'><h6>"
         + marker.title + "</h6>" +
           '<p>'+ events[i].date +  '</p>'+

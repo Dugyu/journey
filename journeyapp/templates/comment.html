@@ -13,7 +13,7 @@
 <div id="content-fluid" class="container p-3">
     <div class="row">
         <div class="col-sm-2 align-self-start">
-        <img class="rounded-circle" width="64" height="64" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}" alt="Generic placeholder image">
+        <img class="rounded-circle" width="64" height="64" src="{{url_for('static',filename='profile_pics/'+ post.author.image_file)}}" alt="Generic placeholder image">
         </div>
         <div class="col-sm-10">
             <div class="text-sm-left">
