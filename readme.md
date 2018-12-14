@@ -17,6 +17,8 @@ reports(comments) about our city is listed. They are also shown as small markers
 Eye(See Station, Create Station)
 Add station to map with location and basic information, you can upload one avatar.
 
+***You Can now left click a location on the map and directly add station there!***
+
 Camera(Create Event/Journal)
 Select station from list and add events for them, you can upload multiple photos.
 
