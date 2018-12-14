@@ -468,12 +468,12 @@
       });
       // Popup window content
 
-      var post_author = "<a href='/report/"+ posts[i].id +"' >"+ posts[i].author +"</a>"
+      var post_author = "<a class='report-text-link' href='/report/"+ posts[i].id +"' >"+ posts[i].author +"</a>"
       console.log(posts[i].id)
       var contentstring= "<div><h5>"
-        + marker.title + "</h5>" + '<br>'+
+        + marker.title + "</h5>" + '<p>'+
          post_author +
-         '<br>'+
+         '</p>'+
          '<p>'+ posts[i].content +  '</p>'+
          '</div>';
        addBehaviour(marker, contentstring)
