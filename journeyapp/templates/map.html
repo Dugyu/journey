@@ -467,8 +467,13 @@
         icon:post_icon
       });
       // Popup window content
+
+      var post_author = "<a href='/report/"+ posts[i].id +"' >"+ posts[i].author +"</a>"
+      console.log(posts[i].id)
       var contentstring= "<div><h5>"
         + marker.title + "</h5>" + '<br>'+
+         post_author +
+         '<br>'+
          '<p>'+ posts[i].content +  '</p>'+
          '</div>';
        addBehaviour(marker, contentstring)
@@ -512,6 +517,7 @@
   var posts = {{ posts | tojson | safe }};
   var events = {{ events | tojson | safe }}
   var userinfo = {{ userinfo | tojson | safe }}
+
 
   // For Events
   function addBehaviour_event(marker, info){

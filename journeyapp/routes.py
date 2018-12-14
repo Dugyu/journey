@@ -136,10 +136,12 @@ def map(city):
         latitude = str(post.latitude)
         longtitude = str(post.longtitude)
         item = {
+            'id':post.id,
             'lat':latitude,
             'lng': longtitude,
             'title': post.title,
-            'content': post.content
+            'content': post.content,
+            'author': post.author.username
         }
         post_data.append(item)
     for event in events:
