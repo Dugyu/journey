@@ -25,4 +25,5 @@ Select station from list and add events for them, you can upload multiple photos
 Comment(Create Report)
 Leave some somments on specific locations. You can let browser get your location automatically or edit it if you care about privacy. 
 
-Video: https://youtu.be/zV_-Z33NhPI
+Video for CS50: https://youtu.be/zV_-Z33NhPI
+Video for DES 3369: https://youtu.be/Dw8Iikb0nsE
