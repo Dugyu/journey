@@ -10,14 +10,16 @@
 
 {% block content %}
 <div id="content-fluid" class="container p-3">
+
     <div class="row">
-    <div class="col-sm-4">
-        {% for i in range(1,5) %}
-        <div class="row mt-5 mb-5">
-        <img class="rounded-circle mx-auto journey-poster" width="256" height="256" src="{{url_for('static', filename='home_pics/JourneyUrbanCafe0' + string(i) +'.png')}}" alt="Journey Urban Cafe Poster">
+        <div class="col-sm-4">
+            {% for i in range(1,5) %}
+            <div class="row mt-5 mb-5">
+            <img class="rounded-circle mx-auto journey-poster" width="256" height="256" src="{{url_for('static', filename='home_pics/JourneyUrbanCafe0' + string(i) +'.png')}}" alt="Journey Urban Cafe Poster">
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    
     <div class="col-sm-8 text-sm-left">
         <div class="row mt-2 mb-5">
             <h1 class="display-2"><b>Journey × Lexicons</b></h1>
@@ -77,5 +79,12 @@
         </div>
     </div>
     </div>
+
+    <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item"
+            src="https://www.youtube.com/embed/Dw8Iikb0nsE"
+            allowfullscreen>
+            </iframe>
+        </div>
 </div>
 {% endblock %}
