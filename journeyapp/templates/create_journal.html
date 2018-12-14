@@ -19,8 +19,8 @@
     <div class="mt-3">
     <form action="/write/{{url}}" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <select class="form-control mb-3" id="stationSelect" name="stationSelect">
-                <option selected>{{selected}}</option>
+            <select class="form-control mb-3" id="stationSelect" name="stationSelect" required>
+                <option value='' selected>{{selected}}</option>
                 {% for station in stations %}
                     <option value="{{station.id}}">{{station.name}}</option>
                 {% endfor %}
